@@ -10,11 +10,32 @@ import WebKit
 
 class NewsSourceViewController: UIViewController {
 
+    //MARK:Properties!
+    var url: String = ""
+    
+    //MARK:Outlets!
     @IBOutlet weak var webView: WKWebView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationItem.title = "Favorites"
+        
+        setWebViewDelegate()
+        setNavigationTitle()
+        webView.load(URLRequest(url: URL(string: url)!))
     }
- 
+}
+
+//MARK:WKNavigationDelegate
+extension NewsSourceViewController: WKNavigationDelegate {
+   
+    private func setWebViewDelegate() {
+        webView.navigationDelegate = self
+    }
+}
+
+extension NewsSourceViewController {
+    
+    private func setNavigationTitle() {
+        self.navigationItem.title = "News Source"
+    }
 }

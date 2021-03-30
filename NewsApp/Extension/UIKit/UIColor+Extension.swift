@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    static var cutomBlue: UIColor {
+    static var customBlue: UIColor {
         return UIColor(named: "customBlue")!
     }
 }
