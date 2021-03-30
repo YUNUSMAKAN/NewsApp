@@ -25,6 +25,13 @@ class NewsSourceViewController: UIViewController {
     }
 }
 
+extension NewsSourceViewController {
+    
+    private func setNavigationTitle() {
+        self.navigationItem.title = "News Source"
+    }
+}
+
 //MARK:WKNavigationDelegate
 extension NewsSourceViewController: WKNavigationDelegate {
    
@@ -33,9 +40,4 @@ extension NewsSourceViewController: WKNavigationDelegate {
     }
 }
 
-extension NewsSourceViewController {
-    
-    private func setNavigationTitle() {
-        self.navigationItem.title = "News Source"
-    }
-}
+

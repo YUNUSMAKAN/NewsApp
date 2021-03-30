@@ -25,17 +25,20 @@ class FavoritesNewsListViewController: UIViewController {
         super.viewDidLoad()
 
         setTableViewDelegate()
-        self.navigationItem.title = "FAVORITES"
+        setNavigationTitle()
         getData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(getData), name: NSNotification.Name(rawValue: "addedNewFavorite"), object: nil)
     }
-
 }
 
 extension FavoritesNewsListViewController {
+    
+    private func setNavigationTitle() {
+        self.navigationItem.title = "FAVORITES"
+    }
     
     @objc func getData() {
         titleArr.removeAll(keepingCapacity: false)
@@ -89,25 +92,25 @@ extension FavoritesNewsListViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-          let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesNewsListCell", for: indexPath) as! FavoritesNewsListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesNewsListCell", for: indexPath) as! FavoritesNewsListTableViewCell
         cell.newsImageView.layer.cornerRadius = 12
         cell.newsTitleLabel.text = titleArr[indexPath.row]
         cell.newsImageView.image = UIImage(data: imageArr[indexPath.row])
         cell.newsAuthorLabel.text = authorArr[indexPath.row]
         cell.newsDateLabel.text = dateArr[indexPath.row]
-          return cell
-      }
-      
-      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titleArr.count
-      }
-      
-      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = NewsDetailBuilder.build()
         vc.chosenNews = "FavoriteNews"
         vc.chosenNewsId = idArr[indexPath.row]
         self.show(vc, sender: nil)
-      }
+    }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
