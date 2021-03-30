@@ -1,4 +1,10 @@
 # NewsApp
+# Used
+- https://newsapi.org/ 
+- Generic Services
+- MVVM
+
+# APP Screenshots
 <img width="292" alt="Ekran Resmi 2021-03-30 19 22 31" src="https://user-images.githubusercontent.com/58694754/113022764-a172be80-918d-11eb-9b30-cbe3325b3590.png">,
 <img width="293" alt="Ekran Resmi 2021-03-30 19 23 13" src="https://user-images.githubusercontent.com/58694754/113022772-a2a3eb80-918d-11eb-8ef4-f6eeb13420b8.png">,
 <img width="302" alt="Ekran Resmi 2021-03-30 19 23 20" src="https://user-images.githubusercontent.com/58694754/113022779-a46daf00-918d-11eb-9ccb-d5c68731ad83.png">,
