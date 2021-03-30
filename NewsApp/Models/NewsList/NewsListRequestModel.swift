@@ -26,10 +26,6 @@ class NewsListRequestModel: RequestModel {
         return "\(Constant.ServicesConstant.baseUrl)?apikey=\(Constant.ServicesConstant.apiKey)"
     }
     
-    override var method: RequestHTTPMethod {
-        return .post
-    }
-    
     override var parameters: [String : Any?] {
         return [
             "q" : self.title,

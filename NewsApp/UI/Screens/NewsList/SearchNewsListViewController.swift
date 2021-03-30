@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import CoreData
+import Kingfisher
+
 
 class SearchNewsListViewController: UIViewController {
 
-    //MARK:Properties
+    //MARK:Properties!
     var writeText: String = ""
+    var viewModel = SearchNewsListViewModel()
     
+    //MARK:Outlets!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
@@ -19,29 +24,40 @@ class SearchNewsListViewController: UIViewController {
         super.viewDidLoad()
         setTableViewDelegate()
         setSearchBar()
-        self.navigationItem.title = "NEWS"
+        setNavigationTitle()
+       
+        //Default Value to news list!
+        searchNews(title: "Fenerbahce", page: 1)
     }
 }
 
 extension SearchNewsListViewController {
     
-    func searchFilms(title: String) {
-//           viewModel.homeSearchFilmsList(title: title) { [weak self] in
-//               guard let self = self else {return}
-//               self.tableView.reloadData()
-//               if self.viewModel.homeSearchFilmsList.count < 1 {
-//                   self.showAlert(title: "ERROR!", description: "NO MOVIE!")
-//               }
-//           }
-       }
+    func searchNews(title: String, page: Int) {
+        viewModel.newsList(title: title, page: page) { [weak self] in
+            guard let self = self else {return}
+            self.tableView.reloadData()
+            if self.viewModel.newsList.count < 1 {
+                self.showAlert(title: "ERROR!", description: "NO NEWS!")
+            }
+        }
+    }
     
-    private func showMovieDetail(movieId: String) {
-           
-           let vc = UIStoryboard.main.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailViewController
-          // vc.viewModel.selectedFilmId = movieId
-           self.show(vc, sender: nil)
-       }
+    private func setNavigationTitle() {
+        self.navigationItem.title = "NEWS"
+    }
+    
+    private func showAlert(title: String, description: String) {
+        DispatchQueue.main.async {
+            let alertView = UIAlertController(title: title, message: description, preferredStyle: .alert)
+            alertView.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                self.searchBar.text = ""
+            }))
+            self.present(alertView, animated: true, completion: nil)
+        }
+    }
 }
+
 //MARK:- UITableViewDelegate & UITableViewDataSource!
 extension SearchNewsListViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -51,33 +67,37 @@ extension SearchNewsListViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-          //let searchFilms = viewModel.homeSearchFilmsList[indexPath.row]
-          let cell = tableView.dequeueReusableCell(withIdentifier: "SearchNewsListCell", for: indexPath) as! SearchNewsListTableViewCell
-          //cell.filmNameLabel.text = "Name: \(searchFilms.title ?? "")"
-          //cell.filmYearLabel.text = "Year: \(searchFilms.year ?? "")"
-          return cell
-      }
-      
-      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          //return viewModel.homeSearchFilmsList.count
-        return 10
-      }
-      
-      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = UIStoryboard.main.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailViewController
-        //vc.modalPresentationStyle = .fullScreen
+        
+        let searchNews = viewModel.newsList[indexPath.row]
+        let url = URL(string: searchNews.urlToImage!)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchNewsListCell", for: indexPath) as! SearchNewsListTableViewCell
+        cell.newsTitleLabel.text = searchNews.title
+        cell.newsImageView.kf.setImage(with: url)
+        cell.newsImageView.layer.cornerRadius = 12
+        cell.newsAuthorLabel.text = searchNews.author
+        cell.newsDateLabel.text = searchNews.publishedAt
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.newsList.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = NewsDetailBuilder.build()
+        DispatchQueue.main.async {
+            vc.viewModel.data = self.viewModel.newsList[indexPath.row]
+        }
         self.show(vc, sender: nil)
-          //guard let chooseFilmId = viewModel.homeSearchFilmsList[indexPath.row].imdbID else { return }
-          //showMovieDetail(movieId: chooseFilmId)
-      }
+    }
 }
 
-//MARK:UISearchBarDelegate
+//MARK:UISearchBarDelegate!
 extension SearchNewsListViewController: UISearchBarDelegate {
     
     private func setSearchBar() {
         searchBar.delegate = self
-        searchBar.placeholder = " Search to movies... "
+        searchBar.placeholder = " Search to news... "
         searchBar.showsCancelButton = false
     }
     
@@ -89,7 +109,7 @@ extension SearchNewsListViewController: UISearchBarDelegate {
     
     @objc private func searchText(text: String) {
         if self.writeText.count > 2 {
-            searchFilms(title: self.writeText)
+            searchNews(title: self.writeText, page: 1)
         }
     }
 }
