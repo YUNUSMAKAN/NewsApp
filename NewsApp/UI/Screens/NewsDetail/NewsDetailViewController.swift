@@ -9,7 +9,6 @@ import UIKit
 import CoreData
 import Kingfisher
 
-
 class NewsDetailViewController: UIViewController {
     
     //MARK: Properties!
@@ -48,12 +47,11 @@ class NewsDetailViewController: UIViewController {
             vc.url = url
             self.show(vc, sender: nil)
             
-        }else {
+        } else {
             let vc = NewsSourceBuilder.build()
             vc.url = viewModel.data?.url ?? ""
             self.show(vc, sender: nil)
         }
-        
     }
     
     @IBAction func shareLinkButton(_ sender: Any) {

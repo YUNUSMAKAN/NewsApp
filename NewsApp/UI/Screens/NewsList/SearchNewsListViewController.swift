@@ -26,7 +26,7 @@ class SearchNewsListViewController: UIViewController {
         setSearchBar()
         setNavigationTitle()
        
-        //Default Value to news list!
+        //Default value to news list!
         searchNews(title: "Fenerbahce", page: 1)
     }
 }
